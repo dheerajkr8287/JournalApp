@@ -90,7 +90,8 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<?> deleteByUserName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        userRepository.deleteByUserName(authentication.getName());
+//        userRepository.deleteByUserName(authentication.getName());
+        userService.deleteByUserName(authentication.getName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

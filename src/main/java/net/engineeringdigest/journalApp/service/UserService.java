@@ -2,6 +2,7 @@ package net.engineeringdigest.journalApp.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.engineeringdigest.journalApp.entity.User;
+import net.engineeringdigest.journalApp.repository.JournalEntryRepository;
 import net.engineeringdigest.journalApp.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.PortResolverImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private JournalEntryRepository journalEntryRepository;
 
     private  static final PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
@@ -78,6 +83,14 @@ public class UserService {
      }
 
      public void deleteByUserName(String userName){
-        userRepository.deleteByUserName(userName);
+//        userRepository.deleteByUserName(userName);
+
+//         ADDING CASCADE LOGIC WHEN THE USER IS DELETE THEN ITS JOURNAL ALSO DELETE
+         User  user = userRepository.findByUserName(userName);
+         if (user !=null && user.getJournalEntries()!=null){
+             journalEntryRepository.deleteAll(user.getJournalEntries());
+         }
+         userRepository.deleteByUserName(userName);
+
      }
 }
