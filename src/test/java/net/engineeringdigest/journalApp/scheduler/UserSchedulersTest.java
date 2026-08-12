@@ -1,6 +1,5 @@
 package net.engineeringdigest.journalApp.scheduler;
 
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +11,9 @@ public class UserSchedulersTest {
     private UserScheduler userScheduler;
 
     @Test
-    public void testFetchUsersAndSendSaMail(){
+    public void testFetchUsersAndSendSaMail() throws InterruptedException {
         userScheduler.fetchUsersAndSendSaMail();
+        Thread.sleep(10000); // 10 seconds to allow async Kafka consumer & SMTP to complete
+
     }
 }

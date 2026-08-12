@@ -19,13 +19,15 @@ public class RedisService {
     public <T> T get(String key, Class<T> entityClass){
         try {
             Object o = redisTemplate.opsForValue().get(key);
-            ObjectMapper mapper=new ObjectMapper();
-            return mapper.readValue(o.toString(),entityClass); // method to deserialize JSON content into Java objects
-        }catch (Exception e){
-            log.error("Exception ",e);
+            if (o == null) {
+                return null;
+            }
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(o.toString(), entityClass); // method to deserialize JSON content into Java objects
+        } catch (Exception e){
+            log.error("Exception ", e);
             return null;
         }
-
     }
 
 
